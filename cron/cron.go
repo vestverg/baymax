@@ -107,12 +107,6 @@ func (fr *FieldRange) IsValid(value int) bool {
 //The "day of week" field can be d#n (or DDD#n), which stands for "the n-th day of week d (or DDD) in the month".
 
 type CronExpression struct {
-	second     CronField
-	minute     CronField
-	hour       CronField
-	dom        CronField
-	month      CronField
-	dow        CronField
 	fields     []CronField
 	expression string
 }
@@ -278,7 +272,7 @@ func (cr *CronField) Add(date time.Time, value int) time.Time {
 		return date.Add(time.Duration(value) * time.Second)
 	case Hour:
 		return date.Add(time.Duration(value) * time.Hour)
-	case DOM, DOW: //???
+	case DOM, DOW:
 		return time.Date(date.Year(), date.Month(), date.Day()+value, date.Hour(), date.Minute(), date.Second(), date.Nanosecond(), date.Location())
 	case Month:
 		return time.Date(date.Year(), date.Month()+time.Month(value), date.Day(), date.Hour(), date.Minute(), date.Second(), date.Nanosecond(), date.Location())
@@ -323,12 +317,6 @@ func Parse(value string) (*CronExpression, error) {
 	}
 
 	return &CronExpression{
-		second:     *seconds,
-		minute:     *minutes,
-		hour:       *hours,
-		dom:        *dom,
-		month:      *months,
-		dow:        *dow,
 		fields:     []CronField{*dow, *months, *dom, *hours, *minutes, *seconds},
 		expression: value,
 	}, nil
