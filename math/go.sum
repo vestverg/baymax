@@ -1,3 +1,4 @@
 github.com/vestverg/baymax/generics v0.0.0-20221228104022-ebdec996d9a7 h1:MWYmCG5zy9wVkNmfDttVGAUfpunFXRlICMC/wMzbP1U=
 github.com/vestverg/baymax/generics v0.0.0-20221228104022-ebdec996d9a7/go.mod h1:c7ldSIuLfdHwQ3cdH0mbIFjrnivF1tsnuw92FWEVplg=
-golang.org/x/exp v0.0.0-20221227203929-1b447090c38c h1:Govq2W3bnHJimHT2ium65kXcI7ZzTniZHcFATnLJM0Q=
+golang.org/x/exp v0.0.0-20230713183714-613f0c0eb8a1 h1:MGwJjxBy0HJshjDNfLsYO8xppfqWlA5ZT9OhtUUhTNw=
+golang.org/x/exp v0.0.0-20230713183714-613f0c0eb8a1/go.mod h1:FXUEEKJgO7OQYeo8N01OfiKP8RXMtf6e8aTskBGqWdc=
