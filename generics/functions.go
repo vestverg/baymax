@@ -11,3 +11,6 @@ type ReduceFunction[T any, R any] func(v1 T, v2 R) R
 
 // Consumer consume value
 type Consumer[T any] func(val T)
+
+// Comparator compare function signature
+type Comparator[T any] func(val1 T, val2 T) int

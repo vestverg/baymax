@@ -1,4 +1,4 @@
-module github.com/vestverg/baymax/generics
+module github.com/vestverg/baymax/bits
 
 go 1.19
 

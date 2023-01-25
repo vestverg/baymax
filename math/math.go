@@ -1,6 +1,10 @@
 package math
 
-import "github.com/vestverg/baymax/generics"
+import (
+	"golang.org/x/exp/constraints"
+
+	"github.com/vestverg/baymax/generics"
+)
 
 // Max ...
 func Max[T generics.Number](first T, rest ...T) T {
@@ -22,4 +26,13 @@ func Min[T generics.Number](first T, rest ...T) T {
 		}
 	}
 	return ans
+}
+
+func Compare[T constraints.Ordered](val1, val2 T) int {
+	if val1 < val2 {
+		return -1
+	} else if val1 == val2 {
+		return 0
+	}
+	return 1
 }

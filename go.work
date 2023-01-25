@@ -1,6 +1,10 @@
 go 1.19
 
 use (
+	./bits
+	./collections
+	./cron
 	./generics
 	./math
+	./scheduler
 )
