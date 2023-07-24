@@ -41,14 +41,13 @@ func (d *DelayedQueue[T]) Peek() *T {
 	return d.heap.Top()
 }
 
-func (d *DelayedQueue[T]) Poll() *T {
+func (d *DelayedQueue[T]) Poll() (value *T) {
 	d.Lock()
 	defer d.Unlock()
-	top := d.heap.Top()
-	if top == nil || !((*top).GetDelay() <= 0) {
-		return nil
+	if top := d.heap.Top(); top != nil && (*top).GetDelay() <= 0 {
+		value = d.heap.Pop()
 	}
-	return d.heap.Pop()
+	return
 }
 
 func (d *DelayedQueue[T]) Interrupt() {
@@ -58,42 +57,55 @@ func (d *DelayedQueue[T]) Interrupt() {
 }
 
 func (d *DelayedQueue[T]) Take() *T {
-	d.Lock()
-	d.Unlock()
 	var res *T
+
 	for res == nil || !d.interrupted {
+		d.Lock()
 		item := d.heap.Top()
+		d.Unlock()
+
 		if item == nil {
 			continue
 		}
+
 		delay := (*item).GetDelay()
 		if delay <= 0 {
+			d.Lock()
 			res = d.heap.Pop()
+			d.Unlock()
 			break
 		}
+
 		time.Sleep(time.Duration(delay))
 	}
+
 	return res
 }
 
-func (d *DelayedQueue[T]) TakeWithTimeout(timeout time.Duration) *T {
+func (d *DelayedQueue[T]) TakeWithTimeout(timeout time.Duration) (res *T) {
 	d.Lock()
-	d.Unlock()
+	defer d.Unlock()
+
 	start := time.Now()
-	var res *T
-	for res == nil || !d.interrupted {
+
+	for res == nil && !d.interrupted {
 		item := d.heap.Top()
+
 		if item == nil {
 			continue
 		}
+
 		delay := (*item).GetDelay()
+
 		if delay <= 0 {
 			res = d.heap.Pop()
 			break
 		}
-		if start.Add(timeout).Before(time.Now()) {
+
+		if time.Since(start) > timeout {
 			break
 		}
 	}
-	return res
+
+	return
 }

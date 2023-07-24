@@ -112,19 +112,18 @@ type CronExpression struct {
 }
 
 func (cr *CronExpression) Next(from time.Time) time.Time {
-	next := from
-	for i := 0; i < 366; i++ {
-		temp := next
+	const maxIterations = 366
+	for i := 0; i < maxIterations; i++ {
+		next := from
 		for _, field := range cr.fields {
-			temp = field.NextOrSame(temp)
+			next = field.NextOrSame(next)
 		}
-		if temp == next {
+		if from.Equal(next) {
 			return next
 		}
-		next = temp
+		from = next
 	}
-
-	return next
+	return from
 }
 
 type CronField struct {
@@ -228,9 +227,9 @@ func (cr *CronField) Next(idx int) int {
 
 }
 
-func (cr *CronField) SetBits(fr *FieldRange) {
+func (cr *CronField) setBits(fr *FieldRange) {
 	if fr.min == fr.max {
-		cr.SetBit(fr.min)
+		cr.setBit(fr.min)
 		return
 	}
 	minMask := math.MaxInt64 << fr.min
@@ -239,7 +238,7 @@ func (cr *CronField) SetBits(fr *FieldRange) {
 
 }
 
-func (cr *CronField) SetBit(idx int) {
+func (cr *CronField) setBit(idx int) {
 	cr.bits = bits.SetBit(cr.bits, idx)
 }
 
@@ -336,7 +335,7 @@ func parseField(field string, fieldType CronFieldType) (*CronField, error) {
 			if err != nil {
 				return nil, fmt.Errorf("failed to parse field %w", err)
 			}
-			cronField.SetBits(r)
+			cronField.setBits(r)
 		} else {
 			rangeStr := part[:slash]
 
@@ -358,10 +357,10 @@ func parseField(field string, fieldType CronFieldType) (*CronField, error) {
 				return nil, fmt.Errorf("delta is negative")
 			}
 			if delta == 1 {
-				cronField.SetBits(r)
+				cronField.setBits(r)
 			}
 			for i := r.min; i <= r.max; i += delta {
-				cronField.SetBit(i)
+				cronField.setBit(i)
 			}
 		}
 	}
