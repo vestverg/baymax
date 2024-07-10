@@ -13,4 +13,5 @@ type BlockingQueue[T any] interface {
 	Take() *T
 	TakeWithTimeout(timeout time.Duration) *T
 	Interrupt()
+	Len() int64
 }

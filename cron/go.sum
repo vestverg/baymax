@@ -1,0 +1,4 @@
+github.com/vestverg/baymax/bits v0.0.0-20230724211444-fab865304858 h1:BjvK7MyezqF8ypdDfvWj/4T3taihavOvVM91cbkJffg=
+github.com/vestverg/baymax/bits v0.0.0-20230724211444-fab865304858/go.mod h1:4jekUuIBjXnYp3+byDV3Tukyt+badYliyC7Wdi5dVn8=
+golang.org/x/exp v0.0.0-20221227203929-1b447090c38c h1:Govq2W3bnHJimHT2ium65kXcI7ZzTniZHcFATnLJM0Q=
+golang.org/x/exp v0.0.0-20221227203929-1b447090c38c/go.mod h1:CxIveKay+FTh1D0yPZemJVgC/95VzuuOLq5Qi4xnoYc=

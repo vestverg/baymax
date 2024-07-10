@@ -59,12 +59,17 @@ func (d *DelayedQueue[T]) Interrupt() {
 func (d *DelayedQueue[T]) Take() *T {
 	var res *T
 
-	for res == nil || !d.interrupted {
-		d.Lock()
-		item := d.heap.Top()
-		d.Unlock()
+	for { // Loop indefinitely until an item is available or interrupted
+		d.RLock()
+		if d.interrupted {
+			d.RUnlock()
+			return nil // Return nil if interrupted
+		}
+		d.RUnlock()
 
+		item := d.heap.Top()
 		if item == nil {
+			time.Sleep(10 * time.Millisecond) // Small sleep to avoid busy-waiting
 			continue
 		}
 
@@ -76,7 +81,8 @@ func (d *DelayedQueue[T]) Take() *T {
 			break
 		}
 
-		time.Sleep(time.Duration(delay))
+		time.Sleep(time.Duration(delay)) //Sleep milliseconds
+
 	}
 
 	return res
@@ -108,4 +114,10 @@ func (d *DelayedQueue[T]) TakeWithTimeout(timeout time.Duration) (res *T) {
 	}
 
 	return
+}
+
+func (d *DelayedQueue[T]) Len() int64 {
+	d.RLock()
+	defer d.RUnlock()
+	return int64(d.heap.Len())
 }
